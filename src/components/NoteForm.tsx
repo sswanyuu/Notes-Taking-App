@@ -3,17 +3,24 @@ import { useNavigate } from "react-router-dom";
 import { Form, Stack, Row, Col, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import CreatableReactSelect from "react-select/creatable";
-import { NoteData, Tag } from "./App";
+import { NoteData, Tag } from "../App";
 import { v4 as uuidV4 } from "uuid";
 type NoteFormProps = {
   onSubmit: (note: NoteData) => void;
   onAddTag: (tag: Tag) => void;
   availableTags: Tag[];
-};
-export function NoteForm({ onSubmit, onAddTag, availableTags }: NoteFormProps) {
+} & Partial<NoteData>;
+export function NoteForm({
+  onSubmit,
+  onAddTag,
+  availableTags,
+  title = "",
+  tags = [],
+  markDown = "",
+}: NoteFormProps) {
   const titleRef = useRef<HTMLInputElement>(null);
   const markDownRef = useRef<HTMLTextAreaElement>(null);
-  const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
+  const [selectedTags, setSelectedTags] = useState<Tag[]>(tags);
   const navigate = useNavigate();
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -29,7 +36,7 @@ export function NoteForm({ onSubmit, onAddTag, availableTags }: NoteFormProps) {
           <Col>
             <Form.Group controlId="title">
               <Form.Label>Title</Form.Label>
-              <Form.Control ref={titleRef} required />
+              <Form.Control ref={titleRef} required defaultValue={title} />
             </Form.Group>
           </Col>
           <Col>
@@ -60,7 +67,13 @@ export function NoteForm({ onSubmit, onAddTag, availableTags }: NoteFormProps) {
           </Col>
           <Form.Group controlId="markDown">
             <Form.Label>Content</Form.Label>
-            <Form.Control required ref={markDownRef} as="textarea" rows={20} />
+            <Form.Control
+              required
+              ref={markDownRef}
+              as="textarea"
+              rows={20}
+              defaultValue={markDown}
+            />
           </Form.Group>
           <Stack
             direction="horizontal"
