@@ -5,6 +5,7 @@ import { NewNote } from "./components/NewNote";
 import { NoteList } from "./components/NoteList";
 import { NoteLayout } from "./components/NoteLayout";
 import { Note } from "./components/Note";
+import { EditNote } from "./components/EditNote";
 import { useLocalStorage } from "./useLocalStorage";
 import { useMemo } from "react";
 import { v4 as uuidV4 } from "uuid";
@@ -48,6 +49,16 @@ function App() {
       ];
     });
   }
+  function onUpdateNote(id: string, { tags, ...data }: NoteData) {
+    setNotes((prevNotes) => {
+      return prevNotes.map((note) => {
+        if (note.id === id) {
+          return { ...note, ...data, tagIds: tags.map((tag) => tag.id) };
+        }
+        return note;
+      });
+    });
+  }
   function addTag(tag: Tag) {
     setTags((prevTags) => [...prevTags, tag]);
   }
@@ -71,7 +82,16 @@ function App() {
         <Route path="*" element={<Navigate to="/" />}></Route>
         <Route path="/:id" element={<NoteLayout notes={notesWithTags} />}>
           <Route index element={<Note />}></Route>
-          <Route path="edit" element={<h1>Edit</h1>}></Route>
+          <Route
+            path="edit"
+            element={
+              <EditNote
+                onSubmit={onUpdateNote}
+                onAddTag={addTag}
+                availableTags={tags}
+              />
+            }
+          ></Route>
         </Route>
       </Routes>
     </Container>

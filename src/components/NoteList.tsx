@@ -2,7 +2,7 @@ import { Row, Col, Stack, Button, Form } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import ReactSelect from "react-select";
 import { useState, useMemo } from "react";
-import { Tag } from "./App";
+import { Tag } from "../App";
 import { NoteCardProps as simplifiedNotes } from "./NoteCard";
 import { NoteCard } from "./NoteCard";
 type NoteListProps = {
