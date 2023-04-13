@@ -3,11 +3,11 @@ import { Link } from "react-router-dom";
 import ReactSelect from "react-select";
 import { useState, useMemo } from "react";
 import { Tag } from "./App";
-import { Note } from "./App";
+import { NoteCardProps as simplifiedNotes } from "./NoteCard";
 import { NoteCard } from "./NoteCard";
 type NoteListProps = {
   availableTags: Tag[];
-  notes: Note[];
+  notes: simplifiedNotes[];
 };
 export function NoteList({ availableTags, notes }: NoteListProps) {
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
@@ -76,11 +76,11 @@ export function NoteList({ availableTags, notes }: NoteListProps) {
             </Form.Group>
           </Col>
         </Row>
-        <Row xs={1} sm={2} md={3} lg={4} className="g-2">
+        <Row xs={1} sm={2} md={3} lg={4}>
           {filteredNotes.map((note) => {
             return (
-              <Col key={note.id}>
-                <NoteCard id={note.id} title={note.title} />
+              <Col key={note.id} className="mb-4">
+                <NoteCard tags={note.tags} id={note.id} title={note.title} />
               </Col>
             );
           })}
