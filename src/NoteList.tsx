@@ -1,14 +1,32 @@
 import { Row, Col, Stack, Button, Form } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import ReactSelect from "react-select";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Tag } from "./App";
+import { Note } from "./App";
+import { NoteCard } from "./NoteCard";
 type NoteListProps = {
   availableTags: Tag[];
+  notes: Note[];
 };
-export function NoteList({ availableTags }: NoteListProps) {
+export function NoteList({ availableTags, notes }: NoteListProps) {
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
   const [title, setTitle] = useState<string>("");
+  const filteredNotes = useMemo(() => {
+    return notes.filter((note) => {
+      return (
+        (title === "" ||
+          note.title.toLowerCase().includes(title.toLowerCase())) &&
+        (selectedTags.length === 0 ||
+          //check if every tag in selectedTags is in note.tags
+          //every() returns true if every element in the array passes the test
+          selectedTags.every((tag) =>
+            note.tags.some((noteTag) => noteTag.id === tag.id)
+          ))
+      );
+    });
+  }, [notes, title, selectedTags]);
+
   return (
     <>
       <Row className="my-4 align-items-center">
@@ -57,6 +75,15 @@ export function NoteList({ availableTags }: NoteListProps) {
               />
             </Form.Group>
           </Col>
+        </Row>
+        <Row xs={1} sm={2} md={3} lg={4} className="g-2">
+          {filteredNotes.map((note) => {
+            return (
+              <Col key={note.id}>
+                <NoteCard id={note.id} title={note.title} />
+              </Col>
+            );
+          })}
         </Row>
       </Form>
     </>
