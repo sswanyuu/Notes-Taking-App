@@ -31,6 +31,8 @@ export function NoteForm({ onSubmit, onAddTag, availableTags }: NoteFormProps) {
               <Form.Label>Title</Form.Label>
               <Form.Control ref={titleRef} required />
             </Form.Group>
+          </Col>
+          <Col>
             <Form.Group controlId="tags">
               <Form.Label>Tag</Form.Label>
               <CreatableReactSelect
@@ -55,30 +57,25 @@ export function NoteForm({ onSubmit, onAddTag, availableTags }: NoteFormProps) {
                 })}
               />
             </Form.Group>
-            <Form.Group controlId="markDown">
-              <Form.Label>Content</Form.Label>
-              <Form.Control
-                required
-                ref={markDownRef}
-                as="textarea"
-                rows={20}
-              />
-            </Form.Group>
-            <Stack
-              direction="horizontal"
-              gap={2}
-              className="mt-4 justify-content-end"
-            >
-              <Button variant="primary" type="submit">
-                Save
-              </Button>
-              <Link to="..">
-                <Button variant="outline-secondary" type="reset">
-                  Cancel
-                </Button>
-              </Link>
-            </Stack>
           </Col>
+          <Form.Group controlId="markDown">
+            <Form.Label>Content</Form.Label>
+            <Form.Control required ref={markDownRef} as="textarea" rows={20} />
+          </Form.Group>
+          <Stack
+            direction="horizontal"
+            gap={2}
+            className="mt-4 justify-content-end"
+          >
+            <Button variant="primary" type="submit">
+              Save
+            </Button>
+            <Link to="..">
+              <Button variant="outline-secondary" type="reset">
+                Cancel
+              </Button>
+            </Link>
+          </Stack>
         </Row>
       </Stack>
     </Form>
