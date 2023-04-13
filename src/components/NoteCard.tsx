@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Tag } from "./App";
+import { Tag } from "../App";
 import { Card, Stack, Badge } from "react-bootstrap";
 import styles from "./NoteCard.module.css";
 export type NoteCardProps = {

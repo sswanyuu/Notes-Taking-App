@@ -1,9 +1,10 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container } from "react-bootstrap";
 import { Routes, Route, Navigate } from "react-router-dom";
-import { NewNote } from "./NewNote";
-import { NoteList } from "./NoteList";
-import { NoteLayout } from "./NoteLayout";
+import { NewNote } from "./components/NewNote";
+import { NoteList } from "./components/NoteList";
+import { NoteLayout } from "./components/NoteLayout";
+import { Note } from "./components/Note";
 import { useLocalStorage } from "./useLocalStorage";
 import { useMemo } from "react";
 import { v4 as uuidV4 } from "uuid";
@@ -69,7 +70,7 @@ function App() {
         ></Route>
         <Route path="*" element={<Navigate to="/" />}></Route>
         <Route path="/:id" element={<NoteLayout notes={notesWithTags} />}>
-          <Route index element={<h1>View</h1>}></Route>
+          <Route index element={<Note />}></Route>
           <Route path="edit" element={<h1>Edit</h1>}></Route>
         </Route>
       </Routes>
