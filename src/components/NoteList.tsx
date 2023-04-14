@@ -1,4 +1,4 @@
-import { Row, Col, Stack, Button, Form } from "react-bootstrap";
+import { Row, Col, Stack, Button, Form, Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import ReactSelect from "react-select";
 import { useState, useMemo } from "react";
@@ -9,9 +9,15 @@ type NoteListProps = {
   availableTags: Tag[];
   notes: simplifiedNotes[];
 };
+type EditTagsModalProps = {
+  availableTags: Tag[];
+  show: boolean;
+  handleClose: () => void;
+};
 export function NoteList({ availableTags, notes }: NoteListProps) {
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
   const [title, setTitle] = useState<string>("");
+  const [showEditTagsModal, setShowEditTagsModal] = useState<boolean>(false);
   const filteredNotes = useMemo(() => {
     return notes.filter((note) => {
       return (
@@ -38,7 +44,12 @@ export function NoteList({ availableTags, notes }: NoteListProps) {
             <Link to="/new">
               <Button variant="primary">New Note</Button>
             </Link>
-            <Button variant="outline-secondary">Edit Tag</Button>
+            <Button
+              onClick={() => setShowEditTagsModal(true)}
+              variant="outline-secondary"
+            >
+              Edit Tag
+            </Button>
           </Stack>
         </Col>
       </Row>
@@ -76,16 +87,52 @@ export function NoteList({ availableTags, notes }: NoteListProps) {
             </Form.Group>
           </Col>
         </Row>
-        <Row xs={1} sm={2} md={3} lg={4}>
-          {filteredNotes.map((note) => {
-            return (
-              <Col key={note.id} className="mb-4">
-                <NoteCard tags={note.tags} id={note.id} title={note.title} />
-              </Col>
-            );
-          })}
-        </Row>
       </Form>
+      <Row xs={1} sm={2} md={3} lg={4}>
+        {filteredNotes.map((note) => {
+          return (
+            <Col key={note.id} className="mb-4">
+              <NoteCard tags={note.tags} id={note.id} title={note.title} />
+            </Col>
+          );
+        })}
+      </Row>
+      <EditTagsModal
+        show={showEditTagsModal}
+        handleClose={() => setShowEditTagsModal(false)}
+        availableTags={availableTags}
+      />
     </>
+  );
+}
+function EditTagsModal({
+  availableTags,
+  show,
+  handleClose,
+}: EditTagsModalProps) {
+  return (
+    <Modal show={show} onHide={handleClose}>
+      <Modal.Header closeButton>
+        <Modal.Title>Edit Tags</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <Form>
+          <Stack gap={2}>
+            {availableTags.map((tag) => {
+              return (
+                <Row key={tag.id}>
+                  <Col>
+                    <Form.Control type="text" value={tag.label} />
+                  </Col>
+                  <Col xs="auto">
+                    <Button variant="outline-danger">&times;</Button>
+                  </Col>
+                </Row>
+              );
+            })}
+          </Stack>
+        </Form>
+      </Modal.Body>
+    </Modal>
   );
 }
