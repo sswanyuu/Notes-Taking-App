@@ -8,13 +8,22 @@ import { NoteCard } from "./NoteCard";
 type NoteListProps = {
   availableTags: Tag[];
   notes: simplifiedNotes[];
+  onUpdateTag: (id: string, label: string) => void;
+  onDeleteTag: (id: string) => void;
 };
 type EditTagsModalProps = {
   availableTags: Tag[];
   show: boolean;
   handleClose: () => void;
+  onUpdateTag: (id: string, label: string) => void;
+  onDeleteTag: (id: string) => void;
 };
-export function NoteList({ availableTags, notes }: NoteListProps) {
+export function NoteList({
+  availableTags,
+  notes,
+  onUpdateTag,
+  onDeleteTag,
+}: NoteListProps) {
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
   const [title, setTitle] = useState<string>("");
   const [showEditTagsModal, setShowEditTagsModal] = useState<boolean>(false);
@@ -101,6 +110,8 @@ export function NoteList({ availableTags, notes }: NoteListProps) {
         show={showEditTagsModal}
         handleClose={() => setShowEditTagsModal(false)}
         availableTags={availableTags}
+        onUpdateTag={onUpdateTag}
+        onDeleteTag={onDeleteTag}
       />
     </>
   );
@@ -109,6 +120,8 @@ function EditTagsModal({
   availableTags,
   show,
   handleClose,
+  onUpdateTag,
+  onDeleteTag,
 }: EditTagsModalProps) {
   return (
     <Modal show={show} onHide={handleClose}>
@@ -122,10 +135,21 @@ function EditTagsModal({
               return (
                 <Row key={tag.id}>
                   <Col>
-                    <Form.Control type="text" value={tag.label} />
+                    <Form.Control
+                      type="text"
+                      value={tag.label}
+                      onChange={(event) =>
+                        onUpdateTag(tag.id, event.target.value)
+                      }
+                    />
                   </Col>
                   <Col xs="auto">
-                    <Button variant="outline-danger">&times;</Button>
+                    <Button
+                      variant="outline-danger"
+                      onClick={() => onDeleteTag(tag.id)}
+                    >
+                      &times;
+                    </Button>
                   </Col>
                 </Row>
               );
